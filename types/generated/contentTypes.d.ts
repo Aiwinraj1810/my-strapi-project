@@ -536,6 +536,91 @@ export interface ApiRestaurantRestaurant extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiTimesheetEntryTimesheetEntry
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'timesheet_entries';
+  info: {
+    displayName: 'Timesheet Entry';
+    pluralName: 'timesheet-entries';
+    singularName: 'timesheet-entry';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    assignedDate: Schema.Attribute.Date;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Blocks;
+    hours: Schema.Attribute.Integer;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::timesheet-entry.timesheet-entry'
+    > &
+      Schema.Attribute.Private;
+    project: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    timesheet: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::timesheet.timesheet'
+    >;
+    typeOfWork: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    weekEnd: Schema.Attribute.Date;
+    weekStart: Schema.Attribute.Date;
+  };
+}
+
+export interface ApiTimesheetTimesheet extends Struct.CollectionTypeSchema {
+  collectionName: 'timesheets';
+  info: {
+    displayName: 'Timesheet';
+    pluralName: 'timesheets';
+    singularName: 'timesheet';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    entries: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::timesheet-entry.timesheet-entry'
+    >;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::timesheet.timesheet'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    sheetStatus: Schema.Attribute.Enumeration<
+      ['MISSING', 'INCOMPLETE', 'COMPLETED']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'MISSING'>;
+    timesheet_entries: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::timesheet-entry.timesheet-entry'
+    >;
+    totalHours: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<0>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    userId: Schema.Attribute.String & Schema.Attribute.Required;
+    weekEnd: Schema.Attribute.Date & Schema.Attribute.Required;
+    weekStart: Schema.Attribute.Date & Schema.Attribute.Required;
+  };
+}
+
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -1049,6 +1134,8 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::category.category': ApiCategoryCategory;
       'api::restaurant.restaurant': ApiRestaurantRestaurant;
+      'api::timesheet-entry.timesheet-entry': ApiTimesheetEntryTimesheetEntry;
+      'api::timesheet.timesheet': ApiTimesheetTimesheet;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

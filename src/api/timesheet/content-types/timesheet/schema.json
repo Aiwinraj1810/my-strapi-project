@@ -1,0 +1,53 @@
+{
+  "kind": "collectionType",
+  "collectionName": "timesheets",
+  "info": {
+    "singularName": "timesheet",
+    "pluralName": "timesheets",
+    "displayName": "Timesheet"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "userId": {
+      "type": "string",
+      "required": true
+    },
+    "weekStart": {
+      "type": "date",
+      "required": true
+    },
+    "weekEnd": {
+      "type": "date",
+      "required": true
+    },
+    "totalHours": {
+      "type": "integer",
+      "required": true,
+      "default": 0
+    },
+    "sheetStatus": {
+      "type": "enumeration",
+      "required": true,
+      "default": "MISSING",
+      "enum": [
+        "MISSING",
+        "INCOMPLETE",
+        "COMPLETED"
+      ]
+    },
+    "entries": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::timesheet-entry.timesheet-entry"
+    },
+    "timesheet_entries": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::timesheet-entry.timesheet-entry",
+      "mappedBy": "timesheet"
+    }
+  }
+}

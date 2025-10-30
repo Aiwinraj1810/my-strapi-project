@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "collectionName": "timesheet_entries",
+  "info": {
+    "singularName": "timesheet-entry",
+    "pluralName": "timesheet-entries",
+    "displayName": "Timesheet Entry"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "project": {
+      "type": "string",
+      "required": true
+    },
+    "typeOfWork": {
+      "type": "string"
+    },
+    "description": {
+      "type": "blocks"
+    },
+    "hours": {
+      "type": "integer"
+    },
+    "assignedDate": {
+      "type": "date"
+    },
+    "weekStart": {
+      "type": "date"
+    },
+    "weekEnd": {
+      "type": "date"
+    },
+    "timesheet": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::timesheet.timesheet",
+      "inversedBy": "timesheet_entries"
+    }
+  }
+}
