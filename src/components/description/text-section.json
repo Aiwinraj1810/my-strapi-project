@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_description_text_sections",
+  "info": {
+    "displayName": "Text-Section",
+    "icon": "pencil"
+  },
+  "options": {},
+  "attributes": {
+    "Title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "richtext"
+    }
+  },
+  "config": {}
+}
