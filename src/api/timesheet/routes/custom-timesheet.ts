@@ -2,10 +2,10 @@ export default {
   routes: [
     {
       method: "GET",
-      path: "/timesheets/with-missing",
-      handler: "timesheet.getWithMissing",
+      path: "/timesheets/full",
+      handler: "timesheet.full", // 👈 points to your custom controller method
       config: {
-        auth: false, // set to true if you want this behind auth
+        auth: false, // or true if you want to restrict access
       },
     },
   ],
