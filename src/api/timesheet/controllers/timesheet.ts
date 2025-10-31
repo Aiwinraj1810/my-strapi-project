@@ -1,5 +1,15 @@
 import { factories } from "@strapi/strapi";
-import { eachWeekOfInterval, getISOWeek, addDays, format } from "date-fns";
+import {
+  eachWeekOfInterval,
+  getISOWeek,
+  addDays,
+  format,
+  startOfWeek,
+  endOfWeek,
+  formatISO,
+  startOfYear,
+  endOfYear,
+} from "date-fns";
 
 export default factories.createCoreController(
   "api::timesheet.timesheet",
@@ -85,12 +95,27 @@ export default factories.createCoreController(
     // ✅ New route: GET /api/timesheets/with-missing
     async getWithMissing(ctx) {
       try {
-        const from = new Date((ctx.query.from as string) || "2025-01-01");
-        const to = new Date((ctx.query.to as string) || "2025-12-31");
-        const page = parseInt(ctx.query.page as string) || 1;
-        const pageSize = parseInt(ctx.query.pageSize as string) || 10;
-        const userId = ctx.query.userId as string | undefined;
-        const status = ctx.query.status as string | undefined;
+        // ✅ Safely cast query
+        const query = ctx.query as Record<string, any>;
+
+        // ✅ Read filter params
+        const startFilter = query["filters[weekStart][$gte]"];
+        const endFilter = query["filters[weekEnd][$lte]"];
+        const from = startFilter
+          ? new Date(startFilter)
+          : new Date("2025-01-01");
+        const to = endFilter ? new Date(endFilter) : new Date("2025-12-31");
+
+        // ✅ Pagination fix
+        const pagination = (query.pagination || {}) as Record<string, any>;
+        const page = parseInt(query.page || pagination.page || "1", 10);
+        const pageSize = parseInt(
+          query.pageSize || pagination.pageSize || "10",
+          10
+        );
+
+        const userId = query.userId as string | undefined;
+        const status = query.status as string | undefined;
 
         // 1️⃣ Fetch existing timesheets
         const where: any = {
